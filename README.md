@@ -1,4 +1,4 @@
-# 🤖 LM Studio Chat Assistant - Firefox Extension
+# 🤖 LMSfox - LM Studio Chat Assistant - Firefox Extension
 
 A powerful Firefox extension that provides a ChatGPT-like interface for LM Studio with **full browser control** and internet search capabilities.
 
@@ -28,7 +28,7 @@ A powerful Firefox extension that provides a ChatGPT-like interface for LM Studi
 - **💾 Session Management** - Save and restore browsing sessions
 - **🎯 Smart Context Menus** - Enhanced right-click options for automation
 
-### 🔍 Smart Internet Bridge
+### 🔍 Smart Internet Bridge (work in progress)
 
 - **🤖 Universal Model Enhancement** - Any LM Studio model gets internet capabilities
 - **🧠 Automatic Search Detection** - Intelligently detects queries needing current info
@@ -36,7 +36,7 @@ A powerful Firefox extension that provides a ChatGPT-like interface for LM Studi
 - **🎯 Context-Aware Results** - Search results formatted for AI understanding
 - **🔄 Seamless Integration** - Works with popup, full chat, and context menus
 
-### 🤖 Advanced Agentic Features
+### 🤖 Advanced Agentic Features (work in progress)
 
 - **📊 Scheduled Automation Tasks** - Create recurring browser automation workflows
 - **🔗 Multi-Site Data Collection** - Systematic data gathering from multiple sources
@@ -84,11 +84,11 @@ A powerful Firefox extension that provides a ChatGPT-like interface for LM Studi
 The extension transforms any LM Studio model into an **internet-enhanced AI assistant**:
 
 ### 🔄 Automatic Process
-1. **Query Analysis** - Detects if your question needs current information
-2. **Smart Search** - Searches DuckDuckGo and Wikipedia for relevant data  
+1. **Query Analysis** - Detects if your question needs current information (work in progress)
+2. **Smart Search** - Searches DuckDuckGo and Wikipedia for relevant data  (work in progress. Kinda working... sometimes)
 3. **Context Enhancement** - Formats results for optimal AI understanding
-4. **Model Integration** - Injects enhanced context into your chosen model
-5. **Unified Response** - Combines current web data with AI knowledge
+4. **Model Integration** - Injects enhanced context into your chosen model (work in progress)
+5. **Unified Response** - Combines current web data with AI knowledge (work in progress)
 
 ### 💡 Example Scenarios
 
@@ -116,7 +116,7 @@ The extension transforms any LM Studio model into an **internet-enhanced AI assi
 
 ### Setup LM Studio
 1. Download and install LM Studio
-2. Download a model (e.g., Llama 2, Code Llama, Mistral)
+2. Download a model (e.g., Llama 2, Code Llama, Mistral) works well with GEMA.
 3. Start the local server:
    - Go to "Local Server" tab
    - Click "Start Server"
@@ -145,14 +145,14 @@ The extension transforms any LM Studio model into an **internet-enhanced AI assi
 
 ### API Settings
 - **Default URL**: `http://localhost:1234/v1`
-- **Timeout**: 10 seconds
+- **Timeout**: 10 seconds (depending on vid card might wanna play with this or you get timeouts) 
 - **Models**: Auto-detected from LM Studio
 
 ### Search Configuration
 - Enable/disable internet search
 - Configure number of search results
-- Include Wikipedia results
-- Search result integration
+- Include Wikipedia results (works. See timeouts)
+- Search result integration (work in progress)
 
 ## 📖 Usage Guide
 
@@ -294,7 +294,7 @@ The extension uses the LM Studio OpenAI-compatible API:
 
 ## 📝 Changelog
 
-### Version 0.0.2 - Advanced Agentic Features
+### Version 0.0.2 Planned - Advanced Agentic Features
 
 - **🤖 Content Analysis Engine** - AI-powered webpage analysis with summaries, key points, and insights
 - **📚 Academic Citation Generator** - Multi-format citation generation (APA, MLA, Chicago, Harvard, IEEE, Vancouver)
@@ -311,14 +311,14 @@ The extension uses the LM Studio OpenAI-compatible API:
 - **🚀 Initial Release** - Core LM Studio integration
 - **💬 Chat Interface** - Clean popup and full-tab interfaces  
 - **🔍 Internet Search Bridge** - Wikipedia and DuckDuckGo integration
-- **🤖 Auto-Search Detection** - Intelligent query analysis
-- **🌐 Full Browser Control** - Complete automation capabilities
-- **📊 Data Extraction** - Structured webpage data collection
-- **🎯 Context Menus** - Enhanced right-click automation options
+- **🤖 Auto-Search Detection** - Intelligent query analysis (work in progress)
+- **🌐 Full Browser Control** - Complete automation capabilities (work in progress)
+- **📊 Data Extraction** - Structured webpage data collection (work in progress)
+- **🎯 Context Menus** - Enhanced right-click automation options (work in progress)
 - **⚙️ Settings Management** - Configurable API and search settings
 - **🔒 Enhanced Permissions** - Full browser access and control
-- **📝 Form Automation** - Smart form filling and interaction
-- **📈 Activity Monitoring** - Real-time browser event tracking
+- **📝 Form Automation** - Smart form filling and interaction (work in progress)
+- **📈 Activity Monitoring** - Real-time browser event tracking (work in progress)
 
 ## 🤝 Contributing
 
@@ -345,7 +345,10 @@ For issues and questions:
 1. Check the troubleshooting section
 2. Review LM Studio documentation
 3. Check Firefox extension development guides
+4. Hit me up on discord
 
 ---
 
-**Made with ❤️ for the AI community**
+**Made with ❤️ for my fellow geeks**
+
+CiphersSon 
