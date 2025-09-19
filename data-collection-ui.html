@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Collection Pipelines - LM Studio Extension</title>
+    <link rel="stylesheet" href="styles/data-collection-ui.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📊 Data Collection Pipelines</h1>
+            <div class="header-actions">
+                <button id="createPipelineBtn" class="btn btn-primary">
+                    ➕ Create Pipeline
+                </button>
+                <button id="importPipelinesBtn" class="btn btn-secondary">
+                    📥 Import
+                </button>
+                <button id="exportPipelinesBtn" class="btn btn-secondary">
+                    📤 Export
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="filter-section">
+                    <h3>🔍 Filters</h3>
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select id="statusFilter">
+                            <option value="">All</option>
+                            <option value="enabled">Enabled</option>
+                            <option value="disabled">Disabled</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Search:</label>
+                        <input type="text" id="searchFilter" placeholder="Search pipelines...">
+                    </div>
+                </div>
+
+                <div class="templates-section">
+                    <h3>📋 Quick Templates</h3>
+                    <div class="template-list">
+                        <button class="template-btn" data-template="news-scraper">
+                            📰 News Scraper
+                        </button>
+                        <button class="template-btn" data-template="product-monitor">
+                            🛍️ Product Monitor
+                        </button>
+                        <button class="template-btn" data-template="research-collector">
+                            🔬 Research Collector
+                        </button>
+                        <button class="template-btn" data-template="social-media">
+                            📱 Social Media
+                        </button>
+                        <button class="template-btn" data-template="job-listings">
+                            💼 Job Listings
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="content">
+                <div class="pipeline-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalPipelines">0</div>
+                        <div class="stat-label">Total Pipelines</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="activePipelines">0</div>
+                        <div class="stat-label">Active</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalRecords">0</div>
+                        <div class="stat-label">Records Collected</div>
+                    </div>
+                </div>
+
+                <div class="pipeline-list" id="pipelineList">
+                    <!-- Pipeline cards will be inserted here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Create/Edit Pipeline Modal -->
+    <div id="pipelineModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Create Data Collection Pipeline</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="pipelineForm">
+                    <div class="form-group">
+                        <label for="pipelineName">Pipeline Name:</label>
+                        <input type="text" id="pipelineName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pipelineDescription">Description:</label>
+                        <textarea id="pipelineDescription" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>🌐 Data Sources</h3>
+                        <div id="sitesList">
+                            <!-- Site configurations will be added here -->
+                        </div>
+                        <button type="button" id="addSiteBtn" class="btn btn-secondary">
+                            ➕ Add Site
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>⚙️ Data Processing</h3>
+                        <div id="processorsList">
+                            <!-- Processors will be added here -->
+                        </div>
+                        <button type="button" id="addProcessorBtn" class="btn btn-secondary">
+                            ➕ Add Processor
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>📤 Output Configuration</h3>
+                        <div id="outputsList">
+                            <!-- Outputs will be added here -->
+                        </div>
+                        <button type="button" id="addOutputBtn" class="btn btn-secondary">
+                            ➕ Add Output
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>⏰ Schedule (Optional)</h3>
+                        <div class="form-group">
+                            <label for="scheduleType">Schedule Type:</label>
+                            <select id="scheduleType">
+                                <option value="">Manual Only</option>
+                                <option value="interval">Interval</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <div id="scheduleConfig" class="schedule-config" style="display: none;">
+                            <!-- Schedule configuration will be shown here -->
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Pipeline</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Site Configuration Modal -->
+    <div id="siteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configure Data Source</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="siteForm">
+                    <div class="form-group">
+                        <label for="siteUrl">Website URL:</label>
+                        <input type="url" id="siteUrl" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="waitTime">Wait Time (ms):</label>
+                        <input type="number" id="waitTime" value="2000" min="500">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxPages">Max Pages:</label>
+                        <input type="number" id="maxPages" value="1" min="1">
+                    </div>
+
+                    <div class="form-section">
+                        <h3>🎯 Data Selectors</h3>
+                        <div class="form-group">
+                            <label for="containerSelector">Container Selector (for multiple items):</label>
+                            <input type="text" id="containerSelector" placeholder="e.g., .product-card, article">
+                        </div>
+                        
+                        <div id="selectorsList">
+                            <!-- Field selectors will be added here -->
+                        </div>
+                        <button type="button" id="addSelectorBtn" class="btn btn-secondary">
+                            ➕ Add Field Selector
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>📄 Pagination (Optional)</h3>
+                        <div class="form-group">
+                            <label for="nextSelector">Next Page Selector:</label>
+                            <input type="text" id="nextSelector" placeholder="e.g., .next-page, a[rel='next']">
+                        </div>
+                        <div class="form-group">
+                            <label for="nextText">Or Next Button Text:</label>
+                            <input type="text" id="nextText" placeholder="e.g., Next, >">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelSiteBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Site</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processor Configuration Modal -->
+    <div id="processorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configure Data Processor</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="processorForm">
+                    <div class="form-group">
+                        <label for="processorType">Processor Type:</label>
+                        <select id="processorType" required>
+                            <option value="">Select Type</option>
+                            <option value="filter">Filter Data</option>
+                            <option value="transform">Transform Fields</option>
+                            <option value="deduplicate">Remove Duplicates</option>
+                            <option value="enrich">Enrich Data</option>
+                            <option value="ai_analysis">AI Analysis</option>
+                            <option value="validate">Validate Data</option>
+                        </select>
+                    </div>
+
+                    <div id="processorConfig">
+                        <!-- Processor-specific configuration will be shown here -->
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelProcessorBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Processor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Output Configuration Modal -->
+    <div id="outputModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configure Output</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="outputForm">
+                    <div class="form-group">
+                        <label for="outputType">Output Type:</label>
+                        <select id="outputType" required>
+                            <option value="">Select Type</option>
+                            <option value="storage">Browser Storage</option>
+                            <option value="csv">CSV File</option>
+                            <option value="json">JSON File</option>
+                            <option value="webhook">Webhook</option>
+                        </select>
+                    </div>
+
+                    <div id="outputConfig">
+                        <!-- Output-specific configuration will be shown here -->
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelOutputBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Output</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/data-collection-ui.js"></script>
+</body>
+</html>

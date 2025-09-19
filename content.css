@@ -1,0 +1,76 @@
+/* Content script styles for LM Studio Firefox Extension */
+
+#lm-studio-floating-btn {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 50px !important;
+    height: 50px !important;
+    background: #007bff !important;
+    color: white !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    z-index: 10000 !important;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3) !important;
+    transition: all 0.3s ease !important;
+    opacity: 0.8 !important;
+    border: none !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+#lm-studio-floating-btn:hover {
+    opacity: 1 !important;
+    transform: scale(1.1) !important;
+}
+
+#lm-studio-quick-actions {
+    position: fixed !important;
+    background: #2d2d2d !important;
+    border: 1px solid #404040 !important;
+    border-radius: 8px !important;
+    padding: 8px !important;
+    display: flex !important;
+    gap: 8px !important;
+    z-index: 10001 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+#lm-studio-quick-actions button {
+    background: none !important;
+    border: none !important;
+    color: #e1e1e1 !important;
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-size: 12px !important;
+    transition: background-color 0.2s !important;
+    font-family: inherit !important;
+}
+
+#lm-studio-quick-actions button:hover {
+    background: #404040 !important;
+}
+
+/* Highlight styles */
+.lm-studio-highlight {
+    background: #ffeb3b !important;
+    color: #000 !important;
+    padding: 2px !important;
+    border-radius: 2px !important;
+}
+
+/* Animation for floating button */
+@keyframes lm-studio-pulse {
+    0% { box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); }
+    50% { box-shadow: 0 4px 20px rgba(0, 123, 255, 0.5); }
+    100% { box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); }
+}
+
+#lm-studio-floating-btn.pulse {
+    animation: lm-studio-pulse 2s infinite !important;
+}

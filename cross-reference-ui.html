@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Reference Analysis - LM Studio Extension</title>
+    <link rel="stylesheet" href="styles/cross-reference-ui.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🔍 Cross-Reference Analysis</h1>
+            <div class="header-actions">
+                <button id="newAnalysisBtn" class="btn btn-primary">
+                    ➕ New Analysis
+                </button>
+                <button id="importAnalysisBtn" class="btn btn-secondary">
+                    📥 Import
+                </button>
+                <button id="exportAnalysisBtn" class="btn btn-secondary">
+                    📤 Export
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="filter-section">
+                    <h3>🔍 Filters</h3>
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select id="statusFilter">
+                            <option value="">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="running">Running</option>
+                            <option value="completed">Completed</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Confidence:</label>
+                        <select id="confidenceFilter">
+                            <option value="">All</option>
+                            <option value="high">High (80%+)</option>
+                            <option value="medium">Medium (50-79%)</option>
+                            <option value="low">Low (<50%)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Search:</label>
+                        <input type="text" id="searchFilter" placeholder="Search analyses...">
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h3>⚡ Quick Actions</h3>
+                    <button class="action-btn" id="analyzeCurrentPageBtn">
+                        📄 Analyze Current Page
+                    </button>
+                    <button class="action-btn" id="compareSourcesBtn">
+                        🔄 Compare Sources
+                    </button>
+                    <button class="action-btn" id="factCheckBtn">
+                        ✅ Fact Check
+                    </button>
+                </div>
+            </aside>
+
+            <main class="content">
+                <div class="analysis-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalAnalyses">0</div>
+                        <div class="stat-label">Total Analyses</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="highConfidence">0</div>
+                        <div class="stat-label">High Confidence</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="contradictionsFound">0</div>
+                        <div class="stat-label">Contradictions Found</div>
+                    </div>
+                </div>
+
+                <div class="analysis-list" id="analysisList">
+                    <!-- Analysis cards will be inserted here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- New Analysis Modal -->
+    <div id="analysisModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Cross-Reference Analysis</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="analysisForm">
+                    <div class="form-group">
+                        <label for="analysisQuery">Query/Topic to Analyze:</label>
+                        <input type="text" id="analysisQuery" required placeholder="e.g., 'Climate change effects on polar ice caps'">
+                    </div>
+
+                    <div class="form-section">
+                        <h3>📚 Information Sources</h3>
+                        <div class="source-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sourceWebSearch" checked>
+                                <span>Web Search</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sourceWikipedia" checked>
+                                <span>Wikipedia</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sourceCurrentPage">
+                                <span>Current Page</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sourceNews">
+                                <span>News Sources</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-sources">
+                            <h4>Custom URLs:</h4>
+                            <div id="customSourcesList">
+                                <!-- Custom sources will be added here -->
+                            </div>
+                            <button type="button" id="addCustomSourceBtn" class="btn btn-secondary">
+                                ➕ Add Custom URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelAnalysisBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Start Analysis</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Details Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="detailsTitle">Analysis Details</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="detailsContent">
+                    <!-- Analysis details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Analysis Modal -->
+    <div id="quickAnalysisModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="quickAnalysisTitle">Quick Analysis</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="quickQuery">What would you like to analyze?</label>
+                    <input type="text" id="quickQuery" placeholder="Enter your query...">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelQuickBtn">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="executeQuickBtn">Analyze</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/cross-reference-ui.js"></script>
+</body>
+</html>

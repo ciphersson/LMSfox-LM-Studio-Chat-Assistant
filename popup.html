@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LM Studio Chat</title>
+    <link rel="stylesheet" href="styles/popup.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>LM Studio Assistant</h2>
+            <div class="header-controls">
+                <button id="settings-btn" class="icon-btn" title="Settings">⚙️</button>
+                <button id="expand-btn" class="icon-btn" title="Open in new tab">🔗</button>
+                <button id="clear-btn" class="icon-btn" title="Clear chat">🗑️</button>
+            </div>
+        </div>
+        
+        <div class="connection-status">
+            <span id="status-indicator" class="status-disconnected"></span>
+            <span id="status-text">Connecting to LM Studio...</span>
+        </div>
+        
+        <div class="chat-messages" id="chat-messages">
+            <div class="welcome-message">
+                <p><img src="icons/robot.png" alt="Robot" width="20" height="20"> Welcome to LM Studio Chat Assistant!</p>
+                <p>I can help you with questions and search the internet for current information.</p>
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <div class="input-wrapper">
+                <textarea 
+                    id="message-input" 
+                    placeholder="Ask me anything... (Shift+Enter for new line)"
+                    rows="1"
+                ></textarea>
+                <div class="input-controls">
+                    <button id="search-toggle" class="toggle-btn" title="Enable internet search">🔍</button>
+                    <button id="send-btn" class="send-btn" title="Send message">➤</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="model-info">
+                <span id="model-name">No model loaded</span>
+            </div>
+        </div>
+    </div>
+    
+    <script src="scripts/popup.js"></script>
+</body>
+</html>

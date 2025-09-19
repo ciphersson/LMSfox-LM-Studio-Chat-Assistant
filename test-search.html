@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Test</title>
+</head>
+<body>
+    <h1>Internet Search Test</h1>
+    <button onclick="testWikipedia()">Test Wikipedia</button>
+    <button onclick="testDuckDuckGo()">Test DuckDuckGo</button>
+    <div id="results"></div>
+
+    <script>
+        async function testWikipedia() {
+            const results = document.getElementById('results');
+            results.innerHTML = 'Testing Wikipedia...';
+            
+            try {
+                const query = 'artificial intelligence';
+                const searchApiUrl = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(query)}&limit=3&format=json&origin=*`;
+                console.log('Wikipedia URL:', searchApiUrl);
+                
+                const response = await fetch(searchApiUrl);
+                console.log('Wikipedia response:', response.status);
+                
+                const data = await response.json();
+                console.log('Wikipedia data:', data);
+                
+                results.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                console.error('Wikipedia error:', error);
+                results.innerHTML = `Error: ${error.message}`;
+            }
+        }
+        
+        async function testDuckDuckGo() {
+            const results = document.getElementById('results');
+            results.innerHTML = 'Testing DuckDuckGo...';
+            
+            try {
+                const query = 'artificial intelligence';
+                const url = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`;
+                console.log('DuckDuckGo URL:', url);
+                
+                const response = await fetch(url);
+                console.log('DuckDuckGo response:', response.status);
+                
+                const data = await response.json();
+                console.log('DuckDuckGo data:', data);
+                
+                results.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                console.error('DuckDuckGo error:', error);
+                results.innerHTML = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

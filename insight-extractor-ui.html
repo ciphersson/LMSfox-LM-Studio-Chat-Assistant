@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LM Studio - Insight Extractor</title>
+    <link rel="stylesheet" href="styles/insight-extractor-ui.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🧠 Insight Extractor</h1>
+                <p>AI-powered extraction of actionable insights and takeaways</p>
+            </div>
+            <div class="header-actions">
+                <button id="analyzeCurrentPage" class="btn btn-primary">
+                    📄 Analyze Current Page
+                </button>
+                <button id="exportInsights" class="btn btn-secondary">
+                    📤 Export
+                </button>
+                <button id="settingsBtn" class="btn btn-secondary">
+                    ⚙️ Settings
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="search-section">
+                    <input type="text" id="searchInput" placeholder="Search insights..." class="search-input">
+                    <button id="searchBtn" class="btn btn-small">🔍</button>
+                </div>
+
+                <div class="filters-section">
+                    <h3>Filters</h3>
+                    
+                    <div class="filter-group">
+                        <label>Confidence Level</label>
+                        <select id="confidenceFilter">
+                            <option value="">All</option>
+                            <option value="high">High (70%+)</option>
+                            <option value="medium">Medium (40-70%)</option>
+                            <option value="low">Low (<40%)</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Complexity</label>
+                        <select id="complexityFilter">
+                            <option value="">All</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Relevance</label>
+                        <select id="relevanceFilter">
+                            <option value="">All</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Date Range</label>
+                        <select id="dateFilter">
+                            <option value="">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+
+                    <button id="clearFilters" class="btn btn-small btn-outline">Clear Filters</button>
+                </div>
+
+                <div class="stats-section">
+                    <h3>Statistics</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Insights:</span>
+                        <span id="totalInsights" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">This Week:</span>
+                        <span id="weekInsights" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Avg Confidence:</span>
+                        <span id="avgConfidence" class="stat-value">0%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">High Priority:</span>
+                        <span id="highPriorityItems" class="stat-value">0</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <section class="content-area">
+                <div class="content-header">
+                    <div class="view-controls">
+                        <button id="gridView" class="view-btn active">📊 Grid</button>
+                        <button id="listView" class="view-btn">📋 List</button>
+                        <button id="timelineView" class="view-btn">📅 Timeline</button>
+                    </div>
+                    <div class="sort-controls">
+                        <select id="sortBy">
+                            <option value="timestamp">Date</option>
+                            <option value="confidence">Confidence</option>
+                            <option value="title">Title</option>
+                            <option value="relevance">Relevance</option>
+                        </select>
+                        <button id="sortOrder" class="btn btn-small">↓</button>
+                    </div>
+                </div>
+
+                <div id="insightsContainer" class="insights-container">
+                    <!-- Insights will be populated here -->
+                </div>
+
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <div class="empty-icon">🧠</div>
+                    <h3>No Insights Yet</h3>
+                    <p>Start by analyzing a webpage to extract insights and actionable takeaways.</p>
+                    <button id="analyzeCurrentPageEmpty" class="btn btn-primary">Analyze Current Page</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Current Page Analysis Panel -->
+        <div id="currentPagePanel" class="current-page-panel" style="display: none;">
+            <div class="panel-header">
+                <h3>📄 Current Page Analysis</h3>
+                <button id="closePanelBtn" class="btn btn-small">✕</button>
+            </div>
+            <div class="panel-content">
+                <div id="currentPageInfo" class="page-info">
+                    <!-- Page info will be populated here -->
+                </div>
+                <div id="analysisProgress" class="analysis-progress" style="display: none;">
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                    <div id="progressText" class="progress-text">Analyzing content...</div>
+                </div>
+                <div id="analysisResults" class="analysis-results" style="display: none;">
+                    <!-- Analysis results will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Insight Detail Modal -->
+    <div id="insightModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="insightModalTitle">Insight Details</h2>
+                <button id="closeInsightModal" class="btn btn-small">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="insightDetails">
+                    <!-- Insight details will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="editInsight" class="btn btn-secondary">✏️ Edit</button>
+                <button id="exportSingleInsight" class="btn btn-secondary">📤 Export</button>
+                <button id="deleteInsight" class="btn btn-danger">🗑️ Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Export Insights</h2>
+                <button id="closeExportModal" class="btn btn-small">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="export-options">
+                    <div class="option-group">
+                        <label>Export Format:</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="exportFormat" value="json" checked> JSON</label>
+                            <label><input type="radio" name="exportFormat" value="csv"> CSV</label>
+                            <label><input type="radio" name="exportFormat" value="markdown"> Markdown</label>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label>Include:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" id="includeKeyInsights" checked> Key Insights</label>
+                            <label><input type="checkbox" id="includeActionableItems" checked> Actionable Items</label>
+                            <label><input type="checkbox" id="includeCriticalPoints" checked> Critical Points</label>
+                            <label><input type="checkbox" id="includeImplications" checked> Implications</label>
+                            <label><input type="checkbox" id="includeRecommendations" checked> Recommendations</label>
+                        </div>
+                    </div>
+
+                    <div class="option-group">
+                        <label>Date Range:</label>
+                        <select id="exportDateRange">
+                            <option value="all">All Time</option>
+                            <option value="week">Last Week</option>
+                            <option value="month">Last Month</option>
+                            <option value="year">Last Year</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelExport" class="btn btn-secondary">Cancel</button>
+                <button id="confirmExport" class="btn btn-primary">📤 Export</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Insight Extractor Settings</h2>
+                <button id="closeSettingsModal" class="btn btn-small">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Analysis Settings</h3>
+                    <div class="setting-item">
+                        <label for="autoAnalyze">Auto-analyze pages:</label>
+                        <input type="checkbox" id="autoAnalyze">
+                    </div>
+                    <div class="setting-item">
+                        <label for="minContentLength">Minimum content length:</label>
+                        <input type="number" id="minContentLength" value="500" min="100">
+                    </div>
+                    <div class="setting-item">
+                        <label for="analysisDepth">Analysis depth:</label>
+                        <select id="analysisDepth">
+                            <option value="basic">Basic</option>
+                            <option value="standard" selected>Standard</option>
+                            <option value="comprehensive">Comprehensive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>AI Settings</h3>
+                    <div class="setting-item">
+                        <label for="aiTemperature">AI Temperature:</label>
+                        <input type="range" id="aiTemperature" min="0" max="1" step="0.1" value="0.3">
+                        <span id="temperatureValue">0.3</span>
+                    </div>
+                    <div class="setting-item">
+                        <label for="maxTokens">Max Tokens:</label>
+                        <input type="number" id="maxTokens" value="2000" min="500" max="4000">
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Storage Settings</h3>
+                    <div class="setting-item">
+                        <label for="maxStoredInsights">Max stored insights:</label>
+                        <input type="number" id="maxStoredInsights" value="100" min="10" max="1000">
+                    </div>
+                    <div class="setting-item">
+                        <label for="autoCleanup">Auto cleanup old insights:</label>
+                        <input type="checkbox" id="autoCleanup" checked>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="resetSettings" class="btn btn-outline">Reset to Defaults</button>
+                <button id="saveSettings" class="btn btn-primary">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div id="loadingText" class="loading-text">Extracting insights...</div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <script src="scripts/insight-extractor.js"></script>
+    <script src="scripts/insight-extractor-ui.js"></script>
+</body>
+</html>

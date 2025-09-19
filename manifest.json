@@ -1,0 +1,91 @@
+{
+  "manifest_version": 2,
+  "name": "LM Studio Chat Assistant",
+  "version": "0.0.1",
+  "description": "A feature-rich ChatGPT-like interface for LM Studio with internet search capabilities",
+  
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage",
+    "contextMenus",
+    "bookmarks",
+    "history",
+    "downloads",
+    "cookies",
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking",
+    "proxy",
+    "privacy",
+    "management",
+    "topSites",
+    "sessions",
+    "notifications",
+    "clipboardRead",
+    "clipboardWrite",
+    "geolocation",
+    "background",
+    "unlimitedStorage",
+    "<all_urls>",
+    "http://*/*",
+    "https://*/*",
+    "file:///*/*",
+    "ftp://*/*"
+  ],
+  
+  "background": {
+    "scripts": ["scripts/background.js"],
+    "persistent": false
+  },
+  
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_title": "LM Studio Chat",
+    "default_icon": {
+      "16": "icons/icon-16.svg",
+      "32": "icons/icon-32.svg",
+      "48": "icons/icon-48.svg",
+      "128": "icons/icon-128.svg"
+    }
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["scripts/content.js", "scripts/smart-highlighter.js"],
+      "css": ["styles/content.css"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  
+  "web_accessible_resources": [
+    "fact-check-ui.html",
+    "content-analysis-ui.html",
+    "content-analysis-ui.css",
+    "content-analysis-ui.js",
+    "insight-extractor-ui.html",
+    "insight-extractor-ui.css",
+    "insight-extractor-ui.js",
+    "popup.html",
+    "chat.html",
+    "data-collection-ui.html",
+    "cross-reference-ui.html",
+    "icons/*",
+    "styles/*",
+    "scripts/*"
+  ],
+  
+  "icons": {
+    "16": "icons/icon-16.svg",
+    "32": "icons/icon-32.svg",
+    "48": "icons/icon-48.svg",
+    "128": "icons/icon-128.svg"
+  },
+  
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+}

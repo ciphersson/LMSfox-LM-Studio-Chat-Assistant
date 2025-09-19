@@ -1,0 +1,39 @@
+{
+  "name": "lm-studio-firefox-extension",
+  "version": "1.0.0",
+  "description": "A feature-rich Firefox extension for LM Studio with ChatGPT-like interface and internet search",
+  "main": "background.js",
+  "scripts": {
+    "build": "web-ext build --source-dir . --artifacts-dir dist",
+    "start": "web-ext run --source-dir . --start-url about:debugging",
+    "lint": "web-ext lint --source-dir .",
+    "sign": "web-ext sign --source-dir . --artifacts-dir dist",
+    "package": "npm run build && npm run sign",
+    "dev": "web-ext run --source-dir . --reload"
+  },
+  "keywords": [
+    "firefox",
+    "extension",
+    "lm-studio",
+    "ai",
+    "chatgpt",
+    "search",
+    "assistant"
+  ],
+  "author": "LM Studio Community",
+  "license": "MIT",
+  "devDependencies": {
+    "web-ext": "^7.8.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/lm-studio-firefox-extension"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/lm-studio-firefox-extension/issues"
+  },
+  "homepage": "https://github.com/your-username/lm-studio-firefox-extension#readme"
+}

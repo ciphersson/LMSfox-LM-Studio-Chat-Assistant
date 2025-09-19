@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LM Studio - Automation Tasks</title>
+    <link rel="stylesheet" href="styles/automation-ui.css">
+</head>
+<body>
+    <div class="automation-container">
+        <header class="automation-header">
+            <h1><img src="icons/robot.png" alt="Robot" width="24" height="24"> Automation Tasks</h1>
+            <div class="header-controls">
+                <button id="new-task-btn" class="btn-primary">+ New Task</button>
+                <button id="import-btn" class="btn-secondary">📥 Import</button>
+                <button id="export-btn" class="btn-secondary">📤 Export</button>
+            </div>
+        </header>
+
+        <div class="automation-main">
+            <div class="tasks-sidebar">
+                <div class="sidebar-header">
+                    <h3>Task Categories</h3>
+                    <div class="filter-controls">
+                        <select id="category-filter">
+                            <option value="all">All Tasks</option>
+                            <option value="data-collection">Data Collection</option>
+                            <option value="form-automation">Form Automation</option>
+                            <option value="monitoring">Monitoring</option>
+                            <option value="analysis">Analysis</option>
+                        </select>
+                        <select id="status-filter">
+                            <option value="all">All Status</option>
+                            <option value="enabled">Enabled</option>
+                            <option value="disabled">Disabled</option>
+                            <option value="running">Running</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="task-templates">
+                    <h4>Quick Templates</h4>
+                    <div class="template-buttons">
+                        <button class="template-btn" data-template="price-monitor">💰 Price Monitor</button>
+                        <button class="template-btn" data-template="news-scraper">📰 News Scraper</button>
+                        <button class="template-btn" data-template="form-filler">📝 Form Filler</button>
+                        <button class="template-btn" data-template="page-analyzer">🔍 Page Analyzer</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tasks-content">
+                <div class="tasks-toolbar">
+                    <div class="search-box">
+                        <input type="text" id="task-search" placeholder="Search tasks...">
+                        <button id="search-btn">🔍</button>
+                    </div>
+                    <div class="view-controls">
+                        <button id="grid-view" class="view-btn active">⊞</button>
+                        <button id="list-view" class="view-btn">☰</button>
+                    </div>
+                </div>
+
+                <div class="tasks-grid" id="tasks-container">
+                    <!-- Tasks will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Task Modal -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Create New Automation Task</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="task-form">
+                    <div class="form-group">
+                        <label for="task-name">Task Name</label>
+                        <input type="text" id="task-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task-description">Description</label>
+                        <textarea id="task-description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="task-type">Schedule Type</label>
+                            <select id="task-type" required>
+                                <option value="interval">Interval (seconds)</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="task-schedule">Schedule Value</label>
+                            <input type="number" id="task-schedule" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task-tags">Tags (comma-separated)</label>
+                        <input type="text" id="task-tags" placeholder="automation, data-collection, monitoring">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Actions</label>
+                        <div id="actions-container">
+                            <!-- Actions will be added dynamically -->
+                        </div>
+                        <button type="button" id="add-action-btn" class="btn-secondary">+ Add Action</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="save-task-btn" class="btn-primary">Save Task</button>
+                <button id="cancel-task-btn" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Modal -->
+    <div id="action-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Action</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="action-form">
+                    <div class="form-group">
+                        <label for="action-type">Action Type</label>
+                        <select id="action-type" required>
+                            <option value="navigate">Navigate to URL</option>
+                            <option value="click">Click Element</option>
+                            <option value="extract_data">Extract Data</option>
+                            <option value="fill_form">Fill Form</option>
+                            <option value="screenshot">Take Screenshot</option>
+                            <option value="wait">Wait</option>
+                            <option value="script">Execute Script</option>
+                            <option value="ai_analysis">AI Analysis</option>
+                        </select>
+                    </div>
+                    
+                    <div id="action-config">
+                        <!-- Action-specific configuration will be shown here -->
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="save-action-btn" class="btn-primary">Add Action</button>
+                <button id="cancel-action-btn" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/automation-ui.js"></script>
+</body>
+</html>

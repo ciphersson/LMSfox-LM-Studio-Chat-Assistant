@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Analysis - LM Studio Extension</title>
+    <link rel="stylesheet" href="styles/content-analysis-ui.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📄 Content Analysis</h1>
+            <div class="header-actions">
+                <button id="analyzeCurrentPageBtn" class="btn btn-primary">
+                    🔍 Analyze Current Page
+                </button>
+                <button id="settingsBtn" class="btn btn-secondary">
+                    ⚙️ Settings
+                </button>
+                <button id="exportAnalysisBtn" class="btn btn-info">
+                    📤 Export Analysis
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Search -->
+                <div class="search-section">
+                    <h3>🔍 Search Analysis</h3>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search analyses...">
+                </div>
+
+                <!-- Filters -->
+                <div class="filter-section">
+                    <h3>🎛️ Filters</h3>
+                    
+                    <div class="filter-group">
+                        <label for="contentTypeFilter">Content Type</label>
+                        <select id="contentTypeFilter">
+                            <option value="">All Types</option>
+                            <option value="academic_paper">Academic Paper</option>
+                            <option value="news_article">News Article</option>
+                            <option value="blog_post">Blog Post</option>
+                            <option value="documentation">Documentation</option>
+                            <option value="product_page">Product Page</option>
+                            <option value="general_webpage">General Webpage</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="dateFilter">Date Range</label>
+                        <select id="dateFilter">
+                            <option value="">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="sortByFilter">Sort By</label>
+                        <select id="sortByFilter">
+                            <option value="timestamp">Date</option>
+                            <option value="title">Title</option>
+                            <option value="wordCount">Word Count</option>
+                            <option value="readingTime">Reading Time</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="sortOrderFilter">Sort Order</label>
+                        <select id="sortOrderFilter">
+                            <option value="desc">Newest First</option>
+                            <option value="asc">Oldest First</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="stats-section">
+                    <h3>📊 Statistics</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Analyses</span>
+                        <span class="stat-value" id="totalAnalyses">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">This Week</span>
+                        <span class="stat-value" id="weeklyAnalyses">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Avg. Reading Time</span>
+                        <span class="stat-value" id="avgReadingTime">0 min</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Most Common Type</span>
+                        <span class="stat-value" id="commonType">-</span>
+                    </div>
+                </div>
+
+                <!-- Current Page Preview -->
+                <div class="current-page-section">
+                    <h3>📑 Current Page</h3>
+                    <div id="currentPageInfo" class="current-page-info">
+                        <div class="page-title" id="currentPageTitle">No page selected</div>
+                        <div class="page-meta" id="currentPageMeta"></div>
+                        <div class="page-status" id="currentPageStatus">Ready to analyze</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content">
+                <div id="analysisGrid" class="analysis-grid">
+                    <!-- Analysis cards will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Details Modal -->
+    <div id="analysisModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="analysisModalTitle">Analysis Details</h2>
+                <div class="modal-actions">
+                    <button id="editAnalysisBtn" class="btn btn-secondary">✏️ Edit</button>
+                    <button id="deleteAnalysisBtn" class="btn btn-danger">🗑️ Delete</button>
+                </div>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="analysisDetailsContent">
+                    <!-- Analysis details will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Content Analysis Settings</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="settingsForm">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="autoAnalyzeEnabled"> 
+                            Enable automatic page analysis
+                        </label>
+                        <small>Automatically analyze pages when they load</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="summaryLength">Default Summary Length</label>
+                        <select id="summaryLength">
+                            <option value="short">Short (2-3 sentences)</option>
+                            <option value="medium">Medium (1-2 paragraphs)</option>
+                            <option value="long">Long (3-4 paragraphs)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Analysis Types to Include</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" id="includeSummary" checked> Summary</label>
+                            <label><input type="checkbox" id="includeKeyPoints" checked> Key Points</label>
+                            <label><input type="checkbox" id="includeActionItems" checked> Action Items</label>
+                            <label><input type="checkbox" id="includeInsights" checked> Insights</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="analysisDelay">Analysis Delay (seconds)</label>
+                        <input type="number" id="analysisDelay" min="1" max="30" value="2">
+                        <small>How long to wait after page load before analyzing</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="cancelSettingsBtn" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📤 Export Analysis</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="exportForm">
+                    <div class="form-group">
+                        <label for="exportFormat">Export Format</label>
+                        <select id="exportFormat">
+                            <option value="json">JSON</option>
+                            <option value="csv">CSV</option>
+                            <option value="markdown">Markdown</option>
+                            <option value="html">HTML Report</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exportRange">Export Range</label>
+                        <select id="exportRange">
+                            <option value="all">All Analyses</option>
+                            <option value="filtered">Current Filtered Results</option>
+                            <option value="selected">Selected Analysis Only</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Include Sections</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" id="exportSummary" checked> Summary</label>
+                            <label><input type="checkbox" id="exportKeyPoints" checked> Key Points</label>
+                            <label><input type="checkbox" id="exportActionItems" checked> Action Items</label>
+                            <label><input type="checkbox" id="exportInsights" checked> Insights</label>
+                            <label><input type="checkbox" id="exportMetadata" checked> Metadata</label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="cancelExportBtn" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Export</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Analyzing content...</div>
+        </div>
+    </div>
+
+    <script src="scripts/content-analysis-ui.js"></script>
+</body>
+</html>

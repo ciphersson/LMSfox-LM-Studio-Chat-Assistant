@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LM Studio Chat Assistant</title>
+    <link rel="stylesheet" href="styles/chat.css">
+</head>
+<body>
+    <div class="chat-app">
+        <header class="app-header">
+            <div class="header-left">
+                <h1><img src="icons/robot.png" alt="Robot" width="24" height="24"> LM Studio Chat Assistant</h1>
+                <div class="connection-status">
+                    <div class="status-indicator" id="statusIndicator"></div>
+                    <span id="statusText">Checking connection...</span>
+                    <button id="refreshConnection" class="refresh-btn" title="Refresh connection">🔄</button>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="model-selector">
+                    <select id="model-select">
+                        <option value="">Select Model...</option>
+                    </select>
+                </div>
+                <button id="settings-btn" class="header-btn" title="Settings">⚙️</button>
+                <button id="export-btn" class="header-btn" title="Export Chat">📤</button>
+                <button id="clear-btn" class="header-btn" title="Clear Chat">🗑️</button>
+            </div>
+        </header>
+
+        <!-- Navigation Bar for Agentic Features -->
+        <nav class="agentic-nav">
+            <div class="nav-section">
+                <span class="nav-label">🤖 Automation:</span>
+                <button class="nav-btn" data-ui="automation-ui.html" title="Scheduled Tasks & Automation">
+                    📅 Automation
+                </button>
+                <button class="nav-btn" data-ui="data-collection-ui.html" title="Multi-site Data Collection">
+                    📊 Data Collection
+                </button>
+            </div>
+            <div class="nav-section">
+                <span class="nav-label">🔍 Research:</span>
+                <button class="nav-btn" data-ui="cross-reference-ui.html" title="Cross-reference Information">
+                    🔗 Cross-Reference
+                </button>
+                <button class="nav-btn" data-ui="fact-check-ui.html" title="Fact-checking & Verification">
+                    ✅ Fact Check
+                </button>
+                <button class="nav-btn" data-ui="research-notes-ui.html" title="Research Notes & AI Tagging">
+                    📝 Research Notes
+                </button>
+                <button class="nav-btn" data-ui="citation-ui.html" title="Academic Citation Generator">
+                    📚 Citations
+                </button>
+            </div>
+            <div class="nav-section">
+                <span class="nav-label">📄 Analysis:</span>
+                <button class="nav-btn" data-ui="content-analysis-ui.html" title="AI Content Analysis & Summaries">
+                    🧠 Content Analysis
+                </button>
+                <button class="nav-btn" data-ui="insight-extractor-ui.html" title="Extract Key Insights & Takeaways">
+                    💡 Insights
+                </button>
+            </div>
+        </nav>
+
+        <main class="chat-main">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Chat History</h3>
+                    <button id="new-chat-btn" class="new-chat-btn">+ New Chat</button>
+                </div>
+                <div class="chat-sessions" id="chat-sessions">
+                    <!-- Chat sessions will be populated here -->
+                </div>
+                
+                <div class="sidebar-footer">
+                    <div class="quick-prompts">
+                        <h4>Quick Prompts</h4>
+                        <div class="prompt-buttons">
+                            <button class="prompt-btn" data-prompt="Explain this concept in simple terms">📚 Explain Simply</button>
+                            <button class="prompt-btn" data-prompt="Write code for">💻 Write Code</button>
+                            <button class="prompt-btn" data-prompt="Summarize the following">📝 Summarize</button>
+                            <button class="prompt-btn" data-prompt="Debug this code">🐛 Debug Code</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-content">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="welcome-message">
+                        <div class="welcome-icon">
+                            <img src="icons/robot.png" alt="Robot" width="48" height="48">
+                        </div>
+                        <h2>Welcome to LM Studio Chat Assistant!</h2>
+                        <p>I'm your AI assistant powered by LM Studio. I can help you with:</p>
+                        <ul>
+                            <li>🔍 Answer questions with internet search</li>
+                            <li>💻 Write and debug code</li>
+                            <li>📚 Explain complex concepts</li>
+                            <li>📝 Summarize content</li>
+                            <li>🌐 Analyze web pages</li>
+                        </ul>
+                        <p>Start by typing a message below or use the quick prompts on the left!</p>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <div class="input-controls-top">
+                        <div class="toggle-controls">
+                            <label class="toggle-label">
+                                <input type="checkbox" id="search-toggle">
+                                <span class="toggle-slider"></span>
+                                <span>🔍 Internet Search</span>
+                            </label>
+                            <label class="toggle-label">
+                                <input type="checkbox" id="context-toggle">
+                                <span class="toggle-slider"></span>
+                                <span>📄 Page Context</span>
+                            </label>
+                            <label class="toggle-label">
+                                <input type="checkbox" id="auto-search-toggle">
+                                <span class="toggle-slider"></span>
+                                <span>🤖 Auto-Search</span>
+                            </label>
+                            <label class="toggle-label">
+                                <input type="checkbox" id="advanced-mode-toggle">
+                                <span class="toggle-slider"></span>
+                                <span>🔧 Advanced Mode</span>
+                            </label>
+                        </div>
+                        <div class="input-stats">
+                            <span id="char-count">0</span> / 4000 characters
+                        </div>
+                    </div>
+                    
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <textarea 
+                                id="message-input" 
+                                placeholder="Ask me anything... (Shift+Enter for new line, Ctrl+Enter to send)"
+                                rows="3"
+                                maxlength="4000"
+                            ></textarea>
+                            <div class="input-buttons">
+                                <button id="attach-btn" class="input-btn" title="Attach file or paste content">📎</button>
+                                <button id="voice-btn" class="input-btn" title="Voice input">🎤</button>
+                                <button id="send-btn" class="send-btn" title="Send message">
+                                    <span class="send-icon">➤</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- File upload modal -->
+    <div id="file-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Attach Content</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-icon">📁</div>
+                    <p>Drop files here or click to select</p>
+                    <input type="file" id="file-input" multiple accept=".txt,.md,.js,.py,.html,.css,.json">
+                </div>
+                <div class="paste-area">
+                    <h4>Or paste content:</h4>
+                    <textarea id="paste-content" placeholder="Paste your content here..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="attach-confirm" class="btn-primary">Attach</button>
+                <button id="attach-cancel" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/chat.js"></script>
+</body>
+</html>

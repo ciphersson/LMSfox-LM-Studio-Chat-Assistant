@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LM Studio Chat Assistant - Settings</title>
+    <link rel="stylesheet" href="styles/options.css">
+</head>
+<body>
+    <div class="settings-container">
+        <header class="settings-header">
+            <h1>🤖 LM Studio Chat Assistant Settings</h1>
+            <p>Configure your AI assistant experience</p>
+        </header>
+
+        <main class="settings-main">
+            <section class="settings-section">
+                <h2>🔗 Connection Settings</h2>
+                <div class="setting-group">
+                    <label for="api-url">LM Studio API URL:</label>
+                    <input type="url" id="api-url" value="http://localhost:1234/v1" placeholder="http://localhost:1234/v1">
+                    <small>The URL where your LM Studio server is running</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="connection-timeout">Connection Timeout (seconds):</label>
+                    <input type="number" id="connection-timeout" value="10" min="5" max="60">
+                    <small>How long to wait for LM Studio to respond</small>
+                </div>
+                
+                <div class="connection-status">
+                    <span id="connection-indicator" class="status-disconnected"></span>
+                    <span id="connection-text">Testing connection...</span>
+                    <button id="test-connection" class="btn-secondary">Test Connection</button>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2>🔍 Web Analysis Settings</h2>
+                <div class="setting-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="search-enabled">
+                        <span class="checkmark"></span>
+                        Enable manual internet search
+                    </label>
+                    <small>Allow manual web searches via toggle button</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="auto-search-enabled">
+                        <span class="checkmark"></span>
+                        Enable automatic smart search
+                    </label>
+                    <small>⚠️ Automatically detect when web search is needed (slower responses)</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="page-context-enabled">
+                        <span class="checkmark"></span>
+                        Enable page context analysis
+                    </label>
+                    <small>⚠️ Include current webpage content in queries (slower responses)</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="search-results-count">Number of search results:</label>
+                    <select id="search-results-count">
+                        <option value="3">3 results</option>
+                        <option value="5" selected>5 results</option>
+                        <option value="7">7 results</option>
+                        <option value="10">10 results</option>
+                    </select>
+                </div>
+                
+                <div class="setting-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="search-wikipedia" checked>
+                        <span class="checkmark"></span>
+                        Include Wikipedia results
+                    </label>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2>💬 Chat Settings</h2>
+                <div class="setting-group">
+                    <label for="default-temperature">Response Creativity (Temperature):</label>
+                    <input type="range" id="default-temperature" min="0" max="1" step="0.1" value="0.7">
+                    <div class="range-labels">
+                        <span>Focused (0.0)</span>
+                        <span id="temperature-value">0.7</span>
+                        <span>Creative (1.0)</span>
+                    </div>
+                    <small>Higher values make responses more creative but less predictable</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="max-tokens">Maximum Response Length:</label>
+                    <select id="max-tokens">
+                        <option value="500">Short (500 tokens)</option>
+                        <option value="1000">Medium (1000 tokens)</option>
+                        <option value="2000">Long (2000 tokens)</option>
+                        <option value="4000" selected>Very Long (4000 tokens)</option>
+                        <option value="8000">Ultra Long (8000 tokens)</option>
+                    </select>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="request-timeout">Request Timeout (minutes):</label>
+                    <select id="request-timeout">
+                        <option value="1">1 minute</option>
+                        <option value="2" selected>2 minutes</option>
+                        <option value="5">5 minutes</option>
+                        <option value="10">10 minutes</option>
+                    </select>
+                    <small>How long to wait for model responses</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="save-history" checked>
+                        <span class="checkmark"></span>
+                        Save chat history
+                    </label>
+                    <small>Store conversations for future reference</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="history-limit">Maximum saved conversations:</label>
+                    <select id="history-limit">
+                        <option value="10">10 conversations</option>
+                        <option value="25" selected>25 conversations</option>
+                        <option value="50">50 conversations</option>
+                        <option value="100">100 conversations</option>
+                    </select>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2>🎨 Interface Settings</h2>
+                <div class="setting-group">
+                    <label for="theme">Theme:</label>
+                    <select id="theme">
+                        <option value="dark" selected>Dark</option>
+                        <option value="light">Light</option>
+                        <option value="auto">Auto (System)</option>
+                    </select>
+                </div>
+                
+                <div class="setting-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="floating-button" checked>
+                        <span class="checkmark"></span>
+                        Show floating button on web pages
+                    </label>
+                    <small>Display a quick access button on websites</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="context-menu" checked>
+                        <span class="checkmark"></span>
+                        Enable context menu integration
+                    </label>
+                    <small>Right-click options for selected text</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="quick-actions" checked>
+                        <span class="checkmark"></span>
+                        Show quick actions on text selection
+                    </label>
+                    <small>Display action buttons when selecting text</small>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2>🔧 Power User Settings</h2>
+                <div class="setting-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="advanced-mode">
+                        <span class="checkmark"></span>
+                        Enable Advanced Debug Mode
+                    </label>
+                    <small>Show detailed API requests, responses, and performance metrics</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="streaming-enabled">
+                        <span class="checkmark"></span>
+                        Enable Streaming Responses (Experimental)
+                    </label>
+                    <small>Show responses as they're generated (requires compatible model)</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="context-window">Context Window Size:</label>
+                    <select id="context-window">
+                        <option value="2048">2K tokens</option>
+                        <option value="4096">4K tokens</option>
+                        <option value="8192" selected>8K tokens</option>
+                        <option value="16384">16K tokens</option>
+                        <option value="32768">32K tokens</option>
+                    </select>
+                    <small>Maximum conversation history to include</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="system-prompt">Custom System Prompt:</label>
+                    <textarea id="system-prompt" rows="4" placeholder="Enter custom system instructions for the AI..."></textarea>
+                    <small>Override default AI behavior with custom instructions</small>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="model-parameters">Additional Model Parameters (JSON):</label>
+                    <textarea id="model-parameters" rows="3" placeholder='{"top_p": 0.9, "frequency_penalty": 0.0}'></textarea>
+                    <small>Advanced model configuration in JSON format</small>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2>🔒 Privacy & Data</h2>
+                <div class="setting-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="analytics-enabled">
+                        <span class="checkmark"></span>
+                        Enable usage analytics
+                    </label>
+                    <small>Help improve the extension by sharing anonymous usage data</small>
+                </div>
+                
+                <div class="setting-group">
+                    <button id="clear-data" class="btn-danger">Clear All Data</button>
+                    <small>Remove all saved conversations and settings</small>
+                </div>
+                
+                <div class="setting-group">
+                    <button id="export-data" class="btn-secondary">Export Data</button>
+                    <button id="import-data" class="btn-secondary">Import Data</button>
+                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                    <small>Backup and restore your conversations and settings</small>
+                </div>
+            </section>
+        </main>
+
+        <footer class="settings-footer">
+            <div class="footer-actions">
+                <button id="reset-defaults" class="btn-secondary">Reset to Defaults</button>
+                <button id="save-settings" class="btn-primary">Save Settings</button>
+            </div>
+            <div class="footer-info">
+                <p>LM Studio Chat Assistant, built by Frank Forrester, because I like LM Studio over Ollama.</p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification"></div>
+    <script src="scripts/options.js"></script>
+</body>
+</html>

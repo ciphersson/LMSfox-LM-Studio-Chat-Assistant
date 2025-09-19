@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Notes - LM Studio Extension</title>
+    <link rel="stylesheet" href="styles/research-notes-ui.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📚 Research Notes</h1>
+            <div class="header-actions">
+                <button id="newNoteBtn" class="btn btn-primary">
+                    ➕ New Note
+                </button>
+                <button id="capturePageBtn" class="btn btn-secondary">
+                    📄 Capture Page
+                </button>
+                <button id="importNotesBtn" class="btn btn-secondary">
+                    📥 Import
+                </button>
+                <button id="exportNotesBtn" class="btn btn-secondary">
+                    📤 Export
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="search-section">
+                    <h3>🔍 Search</h3>
+                    <input type="text" id="searchInput" placeholder="Search notes..." class="search-input">
+                </div>
+
+                <div class="filter-section">
+                    <h3>📂 Filters</h3>
+                    <div class="filter-group">
+                        <label>Category:</label>
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="Research">Research</option>
+                            <option value="Article">Article</option>
+                            <option value="Documentation">Documentation</option>
+                            <option value="Reference">Reference</option>
+                            <option value="Quote">Quote</option>
+                            <option value="Insight">Insight</option>
+                            <option value="Todo">Todo</option>
+                            <option value="Question">Question</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Importance:</label>
+                        <select id="importanceFilter">
+                            <option value="">All</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sort by:</label>
+                        <select id="sortByFilter">
+                            <option value="updatedAt">Last Updated</option>
+                            <option value="createdAt">Created Date</option>
+                            <option value="title">Title</option>
+                            <option value="importance">Importance</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Order:</label>
+                        <select id="sortOrderFilter">
+                            <option value="desc">Newest First</option>
+                            <option value="asc">Oldest First</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tags-section">
+                    <h3>🏷️ Tags</h3>
+                    <div id="tagsList" class="tags-list">
+                        <!-- Tags will be populated here -->
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <h3>📊 Statistics</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Notes:</span>
+                        <span class="stat-value" id="totalNotes">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Words:</span>
+                        <span class="stat-value" id="totalWords">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Avg Reading Time:</span>
+                        <span class="stat-value" id="avgReadingTime">0 min</span>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="content">
+                <div class="notes-grid" id="notesGrid">
+                    <!-- Notes will be populated here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- New Note Modal -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Create New Note</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="noteForm">
+                    <div class="form-group">
+                        <label for="noteTitle">Title:</label>
+                        <input type="text" id="noteTitle" placeholder="Enter note title...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="noteContent">Content:</label>
+                        <textarea id="noteContent" rows="12" placeholder="Enter your note content..." required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="noteCategory">Category:</label>
+                            <select id="noteCategory">
+                                <option value="Research">Research</option>
+                                <option value="Article">Article</option>
+                                <option value="Documentation">Documentation</option>
+                                <option value="Reference">Reference</option>
+                                <option value="Quote">Quote</option>
+                                <option value="Insight">Insight</option>
+                                <option value="Todo">Todo</option>
+                                <option value="Question">Question</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="noteImportance">Importance:</label>
+                            <select id="noteImportance">
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="noteTags">Tags (comma-separated):</label>
+                        <input type="text" id="noteTags" placeholder="e.g., research, ai, machine learning">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="noteUrl">Source URL (optional):</label>
+                        <input type="url" id="noteUrl" placeholder="https://...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="useAI" checked>
+                            <span>Use AI for tagging and analysis</span>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelNoteBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Note</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Details Modal -->
+    <div id="noteDetailsModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="noteDetailsTitle">Note Details</h2>
+                <div class="note-actions">
+                    <button class="btn btn-secondary" id="editNoteBtn">✏️ Edit</button>
+                    <button class="btn btn-danger" id="deleteNoteBtn">🗑️ Delete</button>
+                </div>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="noteDetailsContent">
+                    <!-- Note details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Import Notes</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="importFormat">Format:</label>
+                    <select id="importFormat">
+                        <option value="json">JSON</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="importFile">Select File:</label>
+                    <input type="file" id="importFile" accept=".json">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelImportBtn">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="executeImportBtn">Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Export Notes</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exportFormat">Format:</label>
+                    <select id="exportFormat">
+                        <option value="json">JSON</option>
+                        <option value="markdown">Markdown</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelExportBtn">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="executeExportBtn">Export</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/research-notes-ui.js"></script>
+</body>
+</html>

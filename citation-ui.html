@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citation Generator - LM Studio Extension</title>
+    <link rel="stylesheet" href="styles/citation-ui.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📚 Citation Generator</h1>
+            <div class="header-actions">
+                <button id="newCitationBtn" class="btn btn-primary">
+                    ➕ New Citation
+                </button>
+                <button id="citePageBtn" class="btn btn-secondary">
+                    📄 Cite Current Page
+                </button>
+                <button id="exportBibBtn" class="btn btn-secondary">
+                    📤 Export Bibliography
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="search-section">
+                    <h3>🔍 Search</h3>
+                    <input type="text" id="searchInput" placeholder="Search citations..." class="search-input">
+                </div>
+
+                <div class="filter-section">
+                    <h3>📂 Filters</h3>
+                    <div class="filter-group">
+                        <label>Source Type:</label>
+                        <select id="typeFilter">
+                            <option value="">All Types</option>
+                            <option value="website">Website</option>
+                            <option value="journal">Journal Article</option>
+                            <option value="book">Book</option>
+                            <option value="chapter">Book Chapter</option>
+                            <option value="newspaper">Newspaper</option>
+                            <option value="magazine">Magazine</option>
+                            <option value="report">Report</option>
+                            <option value="thesis">Thesis</option>
+                            <option value="conference">Conference Paper</option>
+                            <option value="video">Video</option>
+                            <option value="podcast">Podcast</option>
+                            <option value="social">Social Media</option>
+                            <option value="software">Software</option>
+                            <option value="dataset">Dataset</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sort by:</label>
+                        <select id="sortByFilter">
+                            <option value="updatedAt">Last Updated</option>
+                            <option value="createdAt">Created Date</option>
+                            <option value="title">Title</option>
+                            <option value="type">Source Type</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Order:</label>
+                        <select id="sortOrderFilter">
+                            <option value="desc">Newest First</option>
+                            <option value="asc">Oldest First</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="formats-section">
+                    <h3>📝 Citation Formats</h3>
+                    <div class="format-list">
+                        <div class="format-item" data-format="apa">
+                            <span class="format-name">APA 7th</span>
+                            <span class="format-desc">Psychology, Education</span>
+                        </div>
+                        <div class="format-item" data-format="mla">
+                            <span class="format-name">MLA 9th</span>
+                            <span class="format-desc">Literature, Arts</span>
+                        </div>
+                        <div class="format-item" data-format="chicago">
+                            <span class="format-name">Chicago 17th</span>
+                            <span class="format-desc">History, Literature</span>
+                        </div>
+                        <div class="format-item" data-format="harvard">
+                            <span class="format-name">Harvard</span>
+                            <span class="format-desc">Business, Sciences</span>
+                        </div>
+                        <div class="format-item" data-format="ieee">
+                            <span class="format-name">IEEE</span>
+                            <span class="format-desc">Engineering, Technology</span>
+                        </div>
+                        <div class="format-item" data-format="vancouver">
+                            <span class="format-name">Vancouver</span>
+                            <span class="format-desc">Medicine, Life Sciences</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <h3>📊 Statistics</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Citations:</span>
+                        <span class="stat-value" id="totalCitations">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Most Used Format:</span>
+                        <span class="stat-value" id="popularFormat">APA</span>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="content">
+                <div class="citations-grid" id="citationsGrid">
+                    <!-- Citations will be populated here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- New Citation Modal -->
+    <div id="citationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Create New Citation</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="citationForm">
+                    <div class="form-group">
+                        <label for="sourceType">Source Type:</label>
+                        <select id="sourceType" required>
+                            <option value="website">Website</option>
+                            <option value="journal">Journal Article</option>
+                            <option value="book">Book</option>
+                            <option value="chapter">Book Chapter</option>
+                            <option value="newspaper">Newspaper Article</option>
+                            <option value="magazine">Magazine Article</option>
+                            <option value="report">Report</option>
+                            <option value="thesis">Thesis/Dissertation</option>
+                            <option value="conference">Conference Paper</option>
+                            <option value="video">Video</option>
+                            <option value="podcast">Podcast</option>
+                            <option value="social">Social Media Post</option>
+                            <option value="software">Software</option>
+                            <option value="dataset">Dataset</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="citationTitle">Title:</label>
+                        <input type="text" id="citationTitle" required placeholder="Enter the title...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="citationAuthors">Authors (one per line):</label>
+                        <textarea id="citationAuthors" rows="3" placeholder="John Smith&#10;Jane Doe"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="citationUrl">URL:</label>
+                            <input type="url" id="citationUrl" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label for="accessDate">Access Date:</label>
+                            <input type="date" id="accessDate">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="publicationDate">Publication Date:</label>
+                            <input type="date" id="publicationDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="citationPublisher">Publisher:</label>
+                            <input type="text" id="citationPublisher" placeholder="Publisher name">
+                        </div>
+                    </div>
+
+                    <!-- Journal-specific fields -->
+                    <div id="journalFields" class="conditional-fields">
+                        <h4>Journal Information</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="journalName">Journal Name:</label>
+                                <input type="text" id="journalName" placeholder="Journal name">
+                            </div>
+                            <div class="form-group">
+                                <label for="volume">Volume:</label>
+                                <input type="text" id="volume" placeholder="Volume">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="issue">Issue:</label>
+                                <input type="text" id="issue" placeholder="Issue">
+                            </div>
+                            <div class="form-group">
+                                <label for="pages">Pages:</label>
+                                <input type="text" id="pages" placeholder="1-10">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book-specific fields -->
+                    <div id="bookFields" class="conditional-fields">
+                        <h4>Book Information</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="edition">Edition:</label>
+                                <input type="text" id="edition" placeholder="2nd edition">
+                            </div>
+                            <div class="form-group">
+                                <label for="location">Location:</label>
+                                <input type="text" id="location" placeholder="City, State">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conference-specific fields -->
+                    <div id="conferenceFields" class="conditional-fields">
+                        <h4>Conference Information</h4>
+                        <div class="form-group">
+                            <label for="conferenceName">Conference Name:</label>
+                            <input type="text" id="conferenceName" placeholder="Conference name">
+                        </div>
+                    </div>
+
+                    <!-- Thesis-specific fields -->
+                    <div id="thesisFields" class="conditional-fields">
+                        <h4>Thesis Information</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="institution">Institution:</label>
+                                <input type="text" id="institution" placeholder="University name">
+                            </div>
+                            <div class="form-group">
+                                <label for="degree">Degree:</label>
+                                <input type="text" id="degree" placeholder="PhD, Master's, etc.">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="doi">DOI:</label>
+                            <input type="text" id="doi" placeholder="10.1000/182">
+                        </div>
+                        <div class="form-group">
+                            <label for="isbn">ISBN:</label>
+                            <input type="text" id="isbn" placeholder="978-0-123456-78-9">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="citationTags">Tags (comma-separated):</label>
+                        <input type="text" id="citationTags" placeholder="research, academic, science">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="citationNotes">Notes:</label>
+                        <textarea id="citationNotes" rows="2" placeholder="Additional notes..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelCitationBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Citation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Citation Details Modal -->
+    <div id="citationDetailsModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="citationDetailsTitle">Citation Details</h2>
+                <div class="citation-actions">
+                    <button class="btn btn-secondary" id="editCitationBtn">✏️ Edit</button>
+                    <button class="btn btn-danger" id="deleteCitationBtn">🗑️ Delete</button>
+                </div>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="citationDetailsContent">
+                    <!-- Citation details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Bibliography Modal -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Export Bibliography</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exportFormat">Citation Format:</label>
+                    <select id="exportFormat">
+                        <option value="apa">APA 7th Edition</option>
+                        <option value="mla">MLA 9th Edition</option>
+                        <option value="chicago">Chicago 17th Edition</option>
+                        <option value="harvard">Harvard Style</option>
+                        <option value="ieee">IEEE Style</option>
+                        <option value="vancouver">Vancouver Style</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Select Citations:</label>
+                    <div class="citation-selection" id="citationSelection">
+                        <!-- Citation checkboxes will be populated here -->
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="selectAllBtn">Select All</button>
+                    <button type="button" class="btn btn-secondary" id="cancelExportBtn">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="executeExportBtn">Export</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/citation-ui.js"></script>
+</body>
+</html>

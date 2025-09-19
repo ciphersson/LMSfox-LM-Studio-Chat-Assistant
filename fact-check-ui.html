@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fact Checker - LM Studio Extension</title>
+    <link rel="stylesheet" href="styles/fact-check-ui.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>✅ Fact Checker</h1>
+            <div class="header-actions">
+                <button id="newFactCheckBtn" class="btn btn-primary">
+                    ➕ New Fact Check
+                </button>
+                <button id="quickCheckBtn" class="btn btn-secondary">
+                    ⚡ Quick Check
+                </button>
+                <button id="exportFactChecksBtn" class="btn btn-secondary">
+                    📤 Export
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="filter-section">
+                    <h3>🔍 Filters</h3>
+                    <div class="filter-group">
+                        <label>Verdict:</label>
+                        <select id="verdictFilter">
+                            <option value="">All</option>
+                            <option value="True">True</option>
+                            <option value="Mostly True">Mostly True</option>
+                            <option value="Partially True">Partially True</option>
+                            <option value="Mixed Evidence">Mixed Evidence</option>
+                            <option value="Partially False">Partially False</option>
+                            <option value="Mostly False">Mostly False</option>
+                            <option value="False">False</option>
+                            <option value="Insufficient Evidence">Insufficient Evidence</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Verification Level:</label>
+                        <select id="verificationFilter">
+                            <option value="">All</option>
+                            <option value="highly_verified">Highly Verified</option>
+                            <option value="verified">Verified</option>
+                            <option value="partially_verified">Partially Verified</option>
+                            <option value="unverified">Unverified</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Search:</label>
+                        <input type="text" id="searchFilter" placeholder="Search fact checks...">
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h3>⚡ Quick Actions</h3>
+                    <button class="action-btn" id="checkCurrentPageBtn">
+                        📄 Check Current Page
+                    </button>
+                    <button class="action-btn" id="checkSelectedTextBtn">
+                        📝 Check Selected Text
+                    </button>
+                    <button class="action-btn" id="checkClipboardBtn">
+                        📋 Check Clipboard
+                    </button>
+                </div>
+
+                <div class="reliability-guide">
+                    <h3>📊 Reliability Guide</h3>
+                    <div class="guide-item">
+                        <div class="guide-color highly-verified"></div>
+                        <span>Highly Verified (80%+ confidence, 3+ reliable sources)</span>
+                    </div>
+                    <div class="guide-item">
+                        <div class="guide-color verified"></div>
+                        <span>Verified (60%+ confidence, 2+ reliable sources)</span>
+                    </div>
+                    <div class="guide-item">
+                        <div class="guide-color partially-verified"></div>
+                        <span>Partially Verified (40%+ confidence, 1+ reliable source)</span>
+                    </div>
+                    <div class="guide-item">
+                        <div class="guide-color unverified"></div>
+                        <span>Unverified (Low confidence or unreliable sources)</span>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="content">
+                <div class="fact-check-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalFactChecks">0</div>
+                        <div class="stat-label">Total Fact Checks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="verifiedClaims">0</div>
+                        <div class="stat-label">Verified Claims</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="falseClaims">0</div>
+                        <div class="stat-label">False Claims</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="avgConfidence">0%</div>
+                        <div class="stat-label">Avg Confidence</div>
+                    </div>
+                </div>
+
+                <div class="fact-check-list" id="factCheckList">
+                    <!-- Fact check cards will be inserted here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- New Fact Check Modal -->
+    <div id="factCheckModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Fact Check</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="factCheckForm">
+                    <div class="form-group">
+                        <label for="claimText">Claim to Fact-Check:</label>
+                        <textarea id="claimText" rows="4" required placeholder="Enter the claim you want to verify..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contextText">Context (Optional):</label>
+                        <textarea id="contextText" rows="3" placeholder="Additional context about where this claim was found..."></textarea>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>📚 Verification Sources</h3>
+                        <div class="source-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sourceFactCheckSites" checked>
+                                <span>Fact-Check Sites (Snopes, FactCheck.org, PolitiFact)</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sourceWikipedia" checked>
+                                <span>Wikipedia</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sourceAcademic" checked>
+                                <span>Academic Sources</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sourceWebSearch">
+                                <span>General Web Search</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-sources">
+                            <h4>Custom Sources:</h4>
+                            <div id="customSourcesList">
+                                <!-- Custom sources will be added here -->
+                            </div>
+                            <button type="button" id="addCustomSourceBtn" class="btn btn-secondary">
+                                ➕ Add Custom Source
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelFactCheckBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Start Fact Check</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fact Check Details Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="detailsTitle">Fact Check Details</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="detailsContent">
+                    <!-- Fact check details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Check Modal -->
+    <div id="quickCheckModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Quick Fact Check</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="quickClaimText">What claim would you like to fact-check?</label>
+                    <textarea id="quickClaimText" rows="3" placeholder="Enter your claim here..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelQuickCheckBtn">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="executeQuickCheckBtn">Fact Check</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/fact-check-ui.js"></script>
+</body>
+</html>
